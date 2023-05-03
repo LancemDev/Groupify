@@ -1,4 +1,5 @@
 import openpyxl
+import pandas as pd
 
 with open('data.txt', 'r') as f:
     data = f.readlines()

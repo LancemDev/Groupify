@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drop Down</title>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+</head>
+<body>
+
+    <h1>Dropzone</h1>
+    <p>Drag and drop files here</p>
+    <p>Or click to upload</p>
+    <p>Accepted file types: .jpg, .jpeg, .png, .gif</p>
+    <p>Max file size: 2MB</p>
+    <p>Max number of files: 10</p>
+    <p>Max width: 1920px</p>    
+    <form action="/file-upload" class="dropzone" id="my-awesome-dropzone">
+        <div>
+            <label for="number">Input Number of groups:</label>
+            <input type="number" name="number" id="no_of_groups"><br><br>
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+    
+    
+</body>
+</html>

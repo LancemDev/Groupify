@@ -6,14 +6,14 @@ import numpy as np
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template ('dropdown.html')
 
 def intoGroup(xlsx_file, no_of_groups):
     #convert the xlx file to csv
-    df=pd.read_excel(xlsx_file)
-    df.to_csv('icsd _comm_skills.csv', index=False)
+    df = pd.read_excel(xlsx_file)
+    df = df.to_csv('icsd _comm_skills.csv', index=False)
 
     # Shuffle the rows randomly
     df = df.sample(frac=1).reset_index(drop=True)
@@ -35,18 +35,23 @@ def intoGroup(xlsx_file, no_of_groups):
 
     #convert the csv file to xlsx
     read_file = pd.read_csv (r'first_web_result.csv')
-    read_file.to_excel (r'first_web_result.xlsx', index = None, header=True)
+    read_file = read_file.to_excel (r'first_web_result.xlsx', index = None, header=True)
+
+    if None:
+        return "File not uploaded"
+    return read_file
 
 
 
-@app.route('/file-upload')
+@app.route('/file-upload', methods=['POST', 'GET'])
 def file_upload():
-    xls_file = request.files.get('my-awesome-dropzone')
-    no_of_groups = request.form.get('no_of_groups')
-    #intoGroup(xls_file, no_of_groups)
-    return jsonify({'message': 'File uploaded successfully'})
+    if request.method == 'POST':
+        xls_file = request.files.get('my-awesome-dropzone')
+        no_of_groups = request.form.get('no_of_groups')
+        result = intoGroup(xls_file, no_of_groups)
+        #return jsonify({'message': 'File uploaded successfully'})
+        return render_template ('index.html', result = result)
+    render_template ('index.html')
     
-
-
 if __name__ == '__main__':
     app.run(debug=True)

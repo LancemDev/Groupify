@@ -3,7 +3,7 @@ import pandas as pd
 def intoGroup(no_of_groups):
     #Read the xlxs file and convert it to csv
     df = pd.read_excel('data.xlsx')
-    df.to_csv('icsd _comm_skills.csv', index=False)
+    df = df.to_csv('icsd _comm_skills.csv', index=False)
 
     # Shuffle the rows randomly
     df = df.sample(frac=1).reset_index(drop=True)

@@ -21,10 +21,10 @@ def intoGroup(xlsx_file, no_of_groups):
 
     # Divide the data into 8 equally-sized groups
     group_size = len(df) // 13
-    groups = [df[i:i+group_size] for i in range(0, len(df), group_size)]
+    groups = [df[i:i+group_size] for i in range(0, no_of_groups, group_size)]
 
     # Make sure that the last group has the remaining rows if the number of rows is not evenly divisible by 8
-    groups[-1] = groups[-1].append(df[len(df)-len(groups[-1]):])
+    groups[-1] = groups[-1].append(df[no_of_groups-len(groups[-1]):])
 
 
     # Iterate through the groups and assign a group number to each row

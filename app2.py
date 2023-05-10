@@ -14,8 +14,19 @@ def index():
 
 # The function that creates groups from the CSV file
 def intoGroup(xlsx_file, no_of_groups):
+    # Delete the old CSV file if it exists
+    if os.path.exists("new2.csv"):
+        os.remove("new2.csv")
+    
+    # Delete the old XLSX file if it exists
+    if os.path.exists("new2.xlsx"):
+        os.remove("new2.xlsx")
+    
+    # Save the uploaded XLSX file
+    xlsx_file.save("new2.xlsx")
+
     # Read the xlsx file
-    df = pd.read_excel(xlsx_file, engine='openpyxl')
+    df = pd.read_excel("new2.xlsx", engine='openpyxl')
 
     # Shuffle the rows randomly
     df = df.sample(frac=1).reset_index(drop=True)
@@ -37,6 +48,7 @@ def intoGroup(xlsx_file, no_of_groups):
     result.to_csv("new2.csv", index=False)
 
     return result
+
 
 # Listening for POST requests to the '/upload' URL
 @app.route('/upload', methods=['POST'])

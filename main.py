@@ -1,5 +1,5 @@
 #These are tests on the functions in the file "app.py"
-# Path: test_app.py
+# This file might not be needed in the final version of the app
 
 from flask import Flask, render_template, request, send_file
 import pandas as pd

@@ -14,21 +14,27 @@ def index():
 # The function that creates groups from the Excel file
 def intoGroup(xlsx_file, no_of_groups):
     # Read the Excel file into a pandas DataFrame
-    df = pd.read_excel(xlsx_file)
+    df = pd.read_excel(xlsx_file, engine='openpyxl')
 
     # Shuffle the rows randomly
     df = df.sample(frac=1).reset_index(drop=True)
 
     # Divide the data into equally-sized groups
-    group_size = len(df) // no_of_groups
-    groups = [df[i:i+group_size] for i in range(0, len(df), group_size)]
+    no_of_groups = len(df) // no_of_groups
+    groups = [df[i:i+no_of_groups] for i in range(0, len(df), no_of_groups)]
 
     # Make sure that the last group has the remaining rows if the number of rows is not evenly divisible by the number of groups
-    groups[-1] = groups[-1].append(df[len(groups)*group_size:])
+    groups[-1] = groups[-1].append(df[len(groups)*no_of_groups:])
+    
+    # Add column labels for "Group" and "Items" in the first row
+    #column_labels = ['Items','Group'] + df.columns.tolist()
+    #groups[0].loc[-1] = column_labels
+    #groups[0] = groups[0].shift(1)
+    #groups[0].iloc[0] = column_labels
 
     # Iterate through the groups and assign a group number to each row
     for i, group in enumerate(groups):
-        group["group"] = i+1
+        group["Group"] = i+1
 
     # Concatenate the groups back into a single DataFrame
     result = pd.concat(groups)
@@ -42,11 +48,29 @@ def intoGroup(xlsx_file, no_of_groups):
 # Listening for POST requests to the '/upload' URL
 @app.route('/upload', methods=['POST', 'GET'])
 def upload():
+    
+    ALLOWED_EXTENSIONS = {'xlsx'}
+
+    def allowed_file(filename):
+        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    
+    uploaded_file = request.files.get('file')
+    uploaded_file.save("data1.xlsx")
     no_of_groups = request.form.get('no_of_groups')
+    
+    #file_content = uploaded_file.read()
+    #xlsx_file.to_xlsx("data1.xlsx")
+    
+    if uploaded_file is None or not allowed_file(uploaded_file.filename):
+        return 'Invalid file. Please upload an Excel file (xlsx).'
+    
     if no_of_groups is not None:
         no_of_groups = int(no_of_groups)
-    xlsx_file = request.files.get('my-awesome-dropzone')
-    final = intoGroup(xlsx_file, no_of_groups)
+    else:
+        return 'No number of groups provided.'
+        
+    final = intoGroup(uploaded_file, no_of_groups)
+
     return send_file("new2.xlsx", mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", as_attachment=True)
 
 

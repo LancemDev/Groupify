@@ -11,15 +11,23 @@
 <body>
 
     <h1>Dropzone</h1>  
-    <form action="/upload" class="dropzone" id="my-awesome-dropzone" name="my-awesome-dropzone" >
+    <form action="/upload" method='post' class="dropzone" id="my-awesome-dropzone" name="my-awesome-dropzone" enctype="multipart/form-data" >
         <div>
             <label for="number">Input Number of groups:</label>
             <input type="number" name="no_of_groups" id="no_of_groups"><br><br>
+            <input type="file" name="file" id="file" enctype="multipart/form-data"><br><br>
             <input type="submit" value="Submit">
         </div>
     </form>
     
     <div id="result">{{ result }}</div>
+
+    <script>
+        Dropzone.options.myDropzone = {
+            paramName: "file",
+            maxFilesize: 5,
+        }
+    </script>
     
 </body>
 </html>

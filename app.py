@@ -24,13 +24,8 @@ def intoGroup(xlsx_file, no_of_groups):
     groups = [df[i:i+no_of_groups] for i in range(0, len(df), no_of_groups)]
 
     # Make sure that the last group has the remaining rows if the number of rows is not evenly divisible by the number of groups
-    groups[-1] = groups[-1].append(df[len(groups)*no_of_groups:])
-    
-    # Add column labels for "Group" and "Items" in the first row
-    #column_labels = ['Items','Group'] + df.columns.tolist()
-    #groups[0].loc[-1] = column_labels
-    #groups[0] = groups[0].shift(1)
-    #groups[0].iloc[0] = column_labels
+
+    groups[-1] = pd.concat([groups[-1],df[len(groups)*no_of_groups:]]).reset_index(drop=True)
 
     # Iterate through the groups and assign a group number to each row
     for i, group in enumerate(groups):
@@ -57,10 +52,7 @@ def upload():
     uploaded_file = request.files.get('file')
     uploaded_file.save("data1.xlsx")
     no_of_groups = request.form.get('no_of_groups')
-    
-    #file_content = uploaded_file.read()
-    #xlsx_file.to_xlsx("data1.xlsx")
-    
+      
     if uploaded_file is None or not allowed_file(uploaded_file.filename):
         return 'Invalid file. Please upload an Excel file (xlsx).'
     
